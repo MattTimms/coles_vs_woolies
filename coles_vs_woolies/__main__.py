@@ -7,6 +7,10 @@ from coles_vs_woolies.main import display, send
 
 def cli():
     example_usage = '''example:
+    python coles_vs_woolies display
+        "Cadbury Dairy Milk Chocolate Block 180g"
+        "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
+        
     python coles_vs_woolies send
         "Cadbury Dairy Milk Chocolate Block 180g"
         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
