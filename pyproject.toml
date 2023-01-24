@@ -1,0 +1,26 @@
+[project]
+name = "coles_vs_woolies"
+version = "1.0.0"
+description = "Compare & be notified of the best offers of your favourite items from Aussie grocers 🦘🍌"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "GPL-3.0-or-later" }
+keywords = ["coles", "woolies", "woolworths"]
+authors = [{ name = "Matthew Timms", email = "matthewtimms@live.com.au" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+homepage = "https://github.com/MattTimms/coles_vs_woolies"
+#documentation = "https://readthedocs.org"
+repository = "https://github.com/MattTimms/coles_vs_woolies"
+changelog = "https://github.com/MattTimms/coles_vs_woolies/blob/master/CHANGELOG.md"
+
+[project.scripts]
+coles_vs_woolies = "coles_vs_woolies.__main__:cli"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"

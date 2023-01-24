@@ -1,0 +1,37 @@
+name: Weekly email service
+
+on:
+  schedule:
+    # Runs “At 07:30 on Wednesday.” (see https://crontab.guru)
+    - cron: '30 7 * * 3'
+  workflow_dispatch:
+    inputs:
+
+jobs:
+  coles_vs_woolies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Install dependencies
+        env:
+          timezone: 'Australia/Melbourne'
+        run: |
+          sudo timedatectl set-timezone $timezone
+          pip install -r requirements.txt
+      - name: Unit Tests
+        run: python -m unittest
+      - name: Email comparisons
+        env:
+          MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
+        run: |
+          python coles_vs_woolies send \
+            ${{ vars.GROCERY_LIST }} \
+            --to_addr ${{ inputs.to_addr || secrets.TO_ADDRS }} \
+            --from_addr no-reply@${{ secrets.DOMAIN }} 
+      
