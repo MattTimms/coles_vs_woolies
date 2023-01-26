@@ -66,13 +66,12 @@ $ python coles_vs_woolies --help
 # example:
 #     python coles_vs_woolies display
 #         "Cadbury Dairy Milk Chocolate Block 180g"
-#         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
+#         "Connoisseur Ice Cream Vanilla Caramel Brownie 1L"
 #        
 #     python coles_vs_woolies send
 #         "Cadbury Dairy Milk Chocolate Block 180g"
 #         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
-#         --to_addr <me@gmail.com>
-#         --to_addr <you@gmail.com>
+#         --to_addrs <me@gmail.com> <you@gmail.com> 
 #         --from_addr <no-reply@domain.com>
 #         --mailersend_api_key=<MAILERSEND_API_KEY>
 ```

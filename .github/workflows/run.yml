@@ -32,6 +32,6 @@ jobs:
         run: |
           python coles_vs_woolies send \
             ${{ vars.GROCERY_LIST }} \
-            --to_addr ${{ inputs.to_addr || secrets.TO_ADDRS }} \
+            --to_addrs ${{ inputs.to_addr || secrets.TO_ADDRS }} \
             --from_addr no-reply@${{ secrets.DOMAIN }} 
       
