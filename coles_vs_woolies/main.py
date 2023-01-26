@@ -73,7 +73,7 @@ if __name__ == '__main__':
     _common_purchases = [  # Really helps to have weight/quantity
         'Cadbury Dairy Milk Chocolate Block 180g',
         'Cadbury Dairy Milk Vanilla Sticks 4 Pack',
-        'Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack',
+        'Connoisseur Ice Cream Vanilla 4 Pack',
         'Connoisseur Ice Cream Vanilla Caramel Brownie 1L',
         'The Juice Brothers 1.5L'
     ]

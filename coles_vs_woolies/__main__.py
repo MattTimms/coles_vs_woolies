@@ -46,7 +46,7 @@ def cli():
     args = vars(parser.parse_args())
 
     action = args.pop('action')
-    products = list(set(args.pop('products')))
+    products = sorted(list(set(args.pop('products'))))
     if action == 'send':
         send(products=products, **args)
     else:

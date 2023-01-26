@@ -19,6 +19,7 @@ def compare_offers(product_offers: ProductOffers):
         for i, _product in enumerate(sorted(product_offers[name])):
             txt_colour = None if not i else 'grey50'
             _console.print(f'  {_product.merchant.upper()}: {_product}', style=txt_colour)
+    _console.print('\n')
 
 
 def best_offers_by_merchant(product_offers: ProductOffers):
@@ -29,6 +30,7 @@ def best_offers_by_merchant(product_offers: ProductOffers):
         _merchant: Merchant = cheapest_product.merchant
         cheapest_products_by_merchant[_merchant].append(cheapest_product)
 
+    _console.print("[bold yellow]shopping list")
     _console.print(
         {merchant: [str(p) for p in products] for merchant, products in cheapest_products_by_merchant.items()}
     )
