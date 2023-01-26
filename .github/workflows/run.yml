@@ -6,6 +6,8 @@ on:
     - cron: '30 20 * * 2'
   workflow_dispatch:
     inputs:
+      to_addr:
+        required: false
 
 jobs:
   coles_vs_woolies:
@@ -24,8 +26,8 @@ jobs:
         run: |
           sudo timedatectl set-timezone $timezone
           pip install -r requirements.txt
-#      - name: Unit Tests
-#        run: python -m unittest
+      - name: Unit Tests
+        run: python -m unittest
       - name: Email comparisons
         env:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}

@@ -1,4 +1,6 @@
+import logging
 import requests
+from http.client import HTTPConnection
 from requests import PreparedRequest, Response
 from requests.adapters import HTTPAdapter, Retry
 
@@ -30,3 +32,16 @@ def new_session() -> requests.Session:
         'User-Agent': 'coles_vs_woolies'  # some User-Agent
     })
     return session
+
+
+def debug_requests_on():
+    HTTPConnection.debuglevel = 1
+
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.DEBUG)
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
+
+
+debug_requests_on()
