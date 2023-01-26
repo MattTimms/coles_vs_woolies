@@ -2,8 +2,8 @@ name: Weekly email service
 
 on:
   schedule:
-    # Runs “At 07:30 on Wednesday.” (see https://crontab.guru)
-    - cron: '30 7 * * 3'
+    # Runs “At 07:30 on Wednesday.” UTC+11 (see https://crontab.guru) & remember that the below is in UTC!
+    - cron: '30 20 * * 2'
   workflow_dispatch:
     inputs:
 
