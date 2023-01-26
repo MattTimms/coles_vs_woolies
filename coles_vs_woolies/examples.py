@@ -45,9 +45,10 @@ def generate_offer_table(product_offers: ProductOffers, verbose: bool = True) ->
     for product_name, products in product_offers.items():
         lowest_price = min(products).price
         cheapest_product_idx = [i for i in range(len(products)) if products[i].price == lowest_price]
+        is_sales = any((_product.is_on_special for _product in products))
         row = [product_name]
         for i, _product in enumerate(products):
-            txt_colour = '[green]' if i in cheapest_product_idx else '[grey85]'
+            txt_colour = '[green]' if is_sales and i in cheapest_product_idx else '[grey85]'
             price = f'${_product.price}' if _product.price is not None else 'n/a'
             row.append(txt_colour + price)
         table.add_row(*row)

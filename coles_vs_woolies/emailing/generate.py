@@ -33,10 +33,11 @@ def generate_weekly_email(product_offers: ProductOffers, out_path: str = None) -
         row_ = html_table_row
         row_ = row_.replace('{{ product }}', product_name)
         lowest_price = min(offers).price
+        is_sales = any((offer.is_on_special for offer in offers))
         for offer in offers:
             merchant = offer.merchant
             price = offer.price if offer.price is not None else 'n/a'
-            colour = green if price == lowest_price else light_grey
+            colour = green if is_sales and price == lowest_price else light_grey
             row_ = row_.replace('{{ %(merchant)s_price }}' % {"merchant": merchant},
                                 f'<a href="{offer.link}" style="color:{colour};text-decoration:inherit;">${price}</a>')
 
