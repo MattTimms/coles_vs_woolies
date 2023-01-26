@@ -105,6 +105,10 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
         return self.Price if self.IsAvailable else None
 
     @property
+    def is_on_special(self) -> Optional[bool]:
+        return self.IsOnSpecial
+
+    @property
     def link(self) -> str:
         return f'https://www.woolworths.com.au/shop/productdetails/{self.Stockcode}/{self.UrlFriendlyName}'
 

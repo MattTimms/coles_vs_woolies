@@ -1,5 +1,6 @@
 # 🍎 coles_vs_woolies 🍏
 
+![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)  
 [![pass](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml)
 [![working just fine for me](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml)
 
@@ -66,13 +67,12 @@ $ python coles_vs_woolies --help
 # example:
 #     python coles_vs_woolies display
 #         "Cadbury Dairy Milk Chocolate Block 180g"
-#         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
+#         "Connoisseur Ice Cream Vanilla Caramel Brownie 1L"
 #        
 #     python coles_vs_woolies send
 #         "Cadbury Dairy Milk Chocolate Block 180g"
 #         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
-#         --to_addr <me@gmail.com>
-#         --to_addr <you@gmail.com>
+#         --to_addrs <me@gmail.com> <you@gmail.com> 
 #         --from_addr <no-reply@domain.com>
 #         --mailersend_api_key=<MAILERSEND_API_KEY>
 ```

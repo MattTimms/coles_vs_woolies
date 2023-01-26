@@ -33,11 +33,15 @@ def send(email_html: str, to_addrs: List[str], from_addr: str, mailersend_api_ke
     week_of_year = datetime.datetime.now().isocalendar().week
     mailer.set_mail_from({"name": "Coles vs. Woolies", "email": from_addr}, mail_body)
     mailer.set_reply_to([{"name": "no-reply", "email": from_addr}], mail_body)
-    mailer.set_subject(f"Wk{week_of_year} Special prices for special items", mail_body)
+    mailer.set_subject(f"Wk{week_of_year}", mail_body)
 
     # Recipients
-    recipients = [{"email": address} for address in to_addrs]
-    mailer.set_mail_to(recipients, mail_body)
+    if len(to_addrs) > 1:
+        mailer.set_mail_to([{"email": from_addr}], mail_body)
+        recipients = [{"email": address} for address in to_addrs]
+        mail_body['bcc'] = recipients
+    else:
+        mailer.set_mail_to([{"email": to_addrs[0]}], mail_body)
 
     # Email content
     mailer.set_html_content(email_html, mail_body)

@@ -74,6 +74,10 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
         return self.pricing.now if self.availability else None
 
     @property
+    def is_on_special(self) -> Optional[bool]:
+        return self.pricing.saveAmount is not None
+
+    @property
     def link(self) -> str:
         return f'https://www.coles.com.au/product/{self.display_name.replace(" ", "-")}-{self.id}'
 

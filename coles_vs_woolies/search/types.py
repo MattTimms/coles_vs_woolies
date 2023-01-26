@@ -17,6 +17,11 @@ class Product(abc.ABC):
 
     @property
     @abc.abstractmethod
+    def is_on_special(self) -> Optional[bool]:
+        pass
+
+    @property
+    @abc.abstractmethod
     def link(self) -> str:
         pass
 
