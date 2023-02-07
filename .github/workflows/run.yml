@@ -8,7 +8,7 @@ on:
     inputs:
       dry_run:
         default: true
-        required: false
+        type: boolean
       to_addr:
         required: false
 
