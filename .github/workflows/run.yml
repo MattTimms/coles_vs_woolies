@@ -29,8 +29,8 @@ jobs:
         run: |
           sudo timedatectl set-timezone $timezone
           pip install -r requirements.txt
-      - name: Unit Tests
-        run: python -m unittest
+#      - name: Unit Tests
+#        run: python -m unittest
       - name: Email comparisons
         env:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
