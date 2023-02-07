@@ -6,6 +6,9 @@ on:
     - cron: '30 20 * * 2'
   workflow_dispatch:
     inputs:
+      dry_run:
+        default: true
+        required: false
       to_addr:
         required: false
 

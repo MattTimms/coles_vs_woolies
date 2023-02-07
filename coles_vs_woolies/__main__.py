@@ -42,6 +42,8 @@ def cli():
     send_parser.add_argument('-m', '--mailersend_api_key', type=str, help='MailerSend API key.', required=False)
     send_parser.add_argument('-o', '--out_dir', type=str, help='Directory for saving copy of the email HTML template.',
                              required=False)
+    send_parser.add_argument('-d', '--dry_run', type=bool, help='Send to disable email delivery', default=False,
+                             required=False)
 
     args = vars(parser.parse_args())
 
