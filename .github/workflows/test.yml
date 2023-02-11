@@ -6,6 +6,12 @@ on:
       - 'main'
   workflow_dispatch:
     inputs:
+      http_proxy:
+        required: false
+        description: http proxy e.g "http://0.0.0.0:8000"
+      https_proxy:
+        required: false
+        description: https proxy e.g "http://0.0.0.0:8000"
 
 jobs:
   test:
@@ -25,4 +31,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Unit Tests
         run: python -m unittest
+        env:
+          HTTP_PROXY: ${{ inputs.http_proxy || vars.HTTP_PROXY }}
+          HTTPS_PROXY: ${{ inputs.https_proxy || vars.HTTPS_PROXY }}
 

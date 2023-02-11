@@ -9,8 +9,12 @@ on:
       dry_run:
         default: true
         type: boolean
-      to_addr:
+      http_proxy:
         required: false
+        description: http proxy e.g "http://0.0.0.0:8000"
+      https_proxy:
+        required: false
+        description: https proxy e.g "http://0.0.0.0:8000"
 
 jobs:
   coles_vs_woolies:
@@ -31,9 +35,14 @@ jobs:
           pip install -r requirements.txt
 #      - name: Unit Tests
 #        run: python -m unittest
+#        env:
+#          HTTP_PROXY: ${{ inputs.http_proxy || vars.HTTP_PROXY }}
+#          HTTPS_PROXY: ${{ inputs.https_proxy || vars.HTTPS_PROXY }}
       - name: Email comparisons
         env:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
+          HTTP_PROXY: ${{ inputs.http_proxy || vars.HTTP_PROXY }}
+          HTTPS_PROXY: ${{ inputs.https_proxy || vars.HTTPS_PROXY }}
         run: |
           python coles_vs_woolies send \
             ${{ vars.GROCERY_LIST }} \
