@@ -4,6 +4,8 @@ from http.client import HTTPConnection
 from requests import PreparedRequest, Response
 from requests.adapters import HTTPAdapter, Retry
 
+from coles_vs_woolies.search.scraperbox import ScraperBoxProxyAdapter
+
 
 class DefaultTimeoutAdapter(HTTPAdapter):
     def __init__(self, *args, timeout: float, **kwargs):
@@ -15,16 +17,21 @@ class DefaultTimeoutAdapter(HTTPAdapter):
         return super().send(request, **kwargs)
 
 
-def new_session() -> requests.Session:
+def new_session(use_proxy: bool = True) -> requests.Session:
     """ Return requests.Session with batteries included; i.e. timeout, retries, error-raising. """
     session = requests.session()
-    retry_strategy = Retry(
-        total=3,
-        backoff_factor=1,
-        status_forcelist=[429, 500, 502, 503, 504],
-        method_whitelist=["HEAD", "GET", "OPTIONS"]
-    )
-    session.mount('https://', DefaultTimeoutAdapter(timeout=5, max_retries=retry_strategy))
+
+    if use_proxy:
+        session.mount('https://', ScraperBoxProxyAdapter())
+    else:
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS"]
+        )
+        session.mount('https://', DefaultTimeoutAdapter(timeout=5, max_retries=retry_strategy))
+
     session.hooks = {
         'response': lambda r, *args, **kwargs: r.raise_for_status()
     }
