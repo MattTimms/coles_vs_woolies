@@ -12,7 +12,7 @@ on:
 
 jobs:
   coles_vs_woolies:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -25,10 +25,7 @@ jobs:
         env:
           timezone: 'Australia/Melbourne'
         run: |
-          sudo timedatectl set-timezone $timezone
           pip install -r requirements.txt
-#      - name: Unit Tests
-#        run: python -m unittest
       - name: Email comparisons
         env:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}

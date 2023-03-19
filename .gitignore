@@ -1,4 +1,5 @@
 .idea
+.github/actions-runner
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

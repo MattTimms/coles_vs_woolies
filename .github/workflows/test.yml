@@ -1,13 +1,14 @@
 name: Tests
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 'main'
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         python-version: [ "3.9", "3.10", "3.11" ]

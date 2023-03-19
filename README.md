@@ -77,7 +77,11 @@ $ python coles_vs_woolies --help
 #         --mailersend_api_key=<MAILERSEND_API_KEY>
 ```
 
-## Install w/ GitHub Actions
+## ~~Install w/ GitHub Actions~~
+
+n.b. I found sporadic success with GitHub-hosted runners; I would recommend setting
+up [self-hosted GitHub runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners)
+for consistent success if you wished to continue using GitHub actions rather than running a simple cron job.
 
 1. Fork this repo
 2. Read the GitHub Action workflow [run.yml](.github/workflows/run.yml)
