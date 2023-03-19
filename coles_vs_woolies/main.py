@@ -41,7 +41,8 @@ def send(*, products: List[str],
          to_addrs: List[str],
          from_addr: str,
          mailersend_api_key: str = None,
-         out_dir: str = None):
+         out_dir: str = None,
+         dry_run: bool = False):
     """
     Send email of product comparisons for a given list of products.
 
@@ -51,6 +52,7 @@ def send(*, products: List[str],
     :param from_addr: Sender's email address. Domain must match that verified with MailerSend.
     :param mailersend_api_key: MailerSend API key. Must otherwise be accessible from env-vars - see readme.
     :param out_dir: Optional, directory for saving a copy of email HTML template.
+    :param dry_run: set to run without sending emails out.
     :return:
     """
     product_offers = get_product_offers(products)
@@ -63,7 +65,8 @@ def send(*, products: List[str],
 
     # Generate & send email
     email_html = generate_weekly_email(product_offers, out_path=email_out_filepath)
-    mailer_send.send(email_html, to_addrs=to_addrs, from_addr=from_addr, mailersend_api_key=mailersend_api_key)
+    if not dry_run:
+        mailer_send.send(email_html, to_addrs=to_addrs, from_addr=from_addr, mailersend_api_key=mailersend_api_key)
 
     # Display emailed product comparison
     generate_offer_table(product_offers)
