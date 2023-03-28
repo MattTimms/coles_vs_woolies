@@ -3,7 +3,7 @@ from typing import Optional, Literal, Dict, List
 
 
 class Product(abc.ABC):
-    merchant: Literal['coles', 'woolies']
+    merchant: Literal['coles', 'woolies', 'iga']
 
     @property
     @abc.abstractmethod
