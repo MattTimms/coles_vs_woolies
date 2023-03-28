@@ -21,30 +21,34 @@ def generate_weekly_email(product_offers: ProductOffers, out_path: str = None) -
     with open(_TEMPLATE_DIR / 'weekly.html', 'r', encoding="utf-8") as f:
         html_template = f.read()
     with open(_TEMPLATE_DIR / 'snippets/table.html', 'r', encoding="utf-8") as f:
-        html_table = f.read()
+        html_template_table = f.read()
     with open(_TEMPLATE_DIR / 'snippets/table_row.html', 'r', encoding="utf-8") as f:
-        html_table_row: str = f.read()
+        html_template_table_row: str = f.read()
 
     # Replace template variables
     rows = []
     green = '#008000'
     light_grey = '#afafaf'
     for product_name, offers in product_offers.items():
-        row_ = html_table_row
-        row_ = row_.replace('{{ product }}', product_name)
+        row_template = html_template_table_row
+        row_template = row_template.replace('{{ product }}', product_name)
+
+        # Replace merchant offers
         lowest_price = min(offers).price
         is_sales = any((offer.is_on_special for offer in offers))
         for offer in offers:
             merchant = offer.merchant
             price = offer.price if offer.price is not None else 'n/a'
             colour = green if is_sales and price == lowest_price else light_grey
-            row_ = row_.replace('{{ %(merchant)s_price }}' % {"merchant": merchant},
-                                f'<a href="{offer.link}" style="color:{colour};text-decoration:inherit;">${price}</a>')
+            zero_padding = '<span style="opacity:0;">0</span>' if len(str(price).split('.')[-1]) == 1 else ''
 
-        rows.append(row_)
+            html_replacement =  f'<a href="{offer.link}" style="color:{colour};text-decoration:inherit;">${price}{zero_padding}</a>'
+            row_template = row_template.replace('{{ %(merchant)s_price }}' % {"merchant": merchant}, html_replacement)
 
-    html_table = html_table.replace('{{ rows }}', ''.join(rows))
-    html_template = html_template.replace('{{ table }}', html_table)
+        rows.append(row_template)
+
+    html_template_table = html_template_table.replace('{{ rows }}', ''.join(rows))
+    html_template = html_template.replace('{{ table }}', html_template_table)
 
     # Add time
     year, week, weekday = datetime.datetime.now().isocalendar()
