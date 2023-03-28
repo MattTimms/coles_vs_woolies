@@ -32,6 +32,8 @@ def get_product_offers(product_names: List[str]) -> ProductOffers:
 def display(products: List[str]):
     """ Displays various product comparisons. """
     product_offers = get_product_offers(products)
+
+    # Display options
     compare_offers(product_offers)
     best_offers_by_merchant(product_offers)
     generate_offer_table(product_offers)

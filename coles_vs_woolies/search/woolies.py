@@ -93,7 +93,7 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
         if self.IsAvailable:
             price_str = f'${self.Price}'
             if self.IsOnSpecial:
-                price_str += f' (save ${self.WasPrice - self.Price})'
+                price_str += f' (save ${self.WasPrice - self.Price:.2f})'
         return f"{self.DisplayName} | {price_str}"
 
     @property
