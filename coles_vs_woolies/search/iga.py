@@ -1,4 +1,3 @@
-import urllib.parse
 from typing import Any, Optional, List, Generator, Dict
 
 from pydantic import BaseModel, Extra
@@ -54,7 +53,7 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
     def __str__(self):
         price_str = f'${self.price}'
         if self.wasPrice is not None:
-            price_str += f' (save ${self.wasPriceNumeric - self.price})'
+            price_str += f' (save ${self.wasPriceNumeric - self.price:.2f})'
         return f"{self.display_name} | {price_str}"
 
     @property
