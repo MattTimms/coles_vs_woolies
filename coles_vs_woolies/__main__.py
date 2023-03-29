@@ -44,11 +44,11 @@ def cli():
     # Send parser
     send_parser = subparsers.add_parser('send', help='Email product price comparisons')
     send_parser.add_argument('products', nargs='+', help=help_product)
-    send_parser.add_argument('-t', '--to_addrs', nargs='+', help="Recipients' email address.", required=True)
+    send_parser.add_argument('-t', '--to_addrs', nargs='+', help="Recipients' email address.", required=False)
     send_parser.add_argument('-o', '--out_dir', type=str, help='Directory for saving copy of the email HTML template.',
                              required=False)
-    send_parser.add_argument('-d', '--dry_run', type=bool, help='Disable email delivery', default=False,
-                             required=False)
+    send_parser.add_argument('-d', '--dry_run', action='store_true', help='Disable email delivery',
+                             default=False, required=False)
 
     # Parse inputs
     kwargs = vars(parser.parse_args())
@@ -62,7 +62,9 @@ def cli():
         for job in jobs:
             _run(action, job.products, to_addrs=job.to_addrs, **kwargs)
     else:
-        products = _parse_product_inputs(kwargs.pop('products'))
+        if action == 'send' and kwargs.get('to_addrs', None) is None:
+            parser.error('the following arguments are required: -t/--to_addrs')
+        products = _parse_product_inputs(_product_inputs)
         _run(action, products, **kwargs)
 
 

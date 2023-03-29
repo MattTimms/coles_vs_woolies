@@ -10,8 +10,37 @@ on:
         default: true
         type: boolean
 
+
+# n.b shocked to learn GH actions don't support yaml anchors (https://github.com/actions/runner/issues/1182)
 jobs:
-  coles_vs_woolies:
+  github:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - name: Install dependencies
+        env:
+          timezone: 'Australia/Melbourne'
+        run: |
+          pip install -r requirements.txt
+      - name: Place shopping list
+        run: |
+          echo '${{ secrets.SHOPPING_LIST }}' >> shopping-list.json
+      - name: Email comparisons
+        env:
+          MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
+          FROM_ADDRESS: no-reply@${{ secrets.DOMAIN }}
+        run: |
+          python coles_vs_woolies send shopping-list.json \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry_run' || '' }}
+  local:
+    needs: github
+    if: always() && contains(needs.*.result, 'failure')
     runs-on: self-hosted
     steps:
       - name: Check out repo
@@ -26,12 +55,13 @@ jobs:
           timezone: 'Australia/Melbourne'
         run: |
           pip install -r requirements.txt
+      - name: Place shopping list
+        run: |
+          echo '${{ secrets.SHOPPING_LIST }}' >> shopping-list.json
       - name: Email comparisons
         env:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
+          FROM_ADDRESS: no-reply@${{ secrets.DOMAIN }}
         run: |
-          python coles_vs_woolies send \
-            ${{ vars.GROCERY_LIST }} \
-            --to_addrs ${{ inputs.to_addr || secrets.TO_ADDRS }} \
-            --from_addr no-reply@${{ secrets.DOMAIN }} 
-      
+          python coles_vs_woolies send shopping-list.json \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry_run' || '' }}
