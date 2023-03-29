@@ -154,7 +154,6 @@ def search(search_term: str, page=1) -> Generator[ProductPageSearchResult, None,
     while True:
         response = _session.post(
             url=url,
-            # cookies={'bm_sz': _session.cookies.get('bm_sz')},
             json=body,
         ).json()
         search_page = ProductPageSearchResult.parse_obj(response)
