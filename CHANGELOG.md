@@ -3,6 +3,7 @@
 ## v1.2.0 - pre-release
 
 * Added 'iga' merchant
+* Added CLI import shopping list from txt file
 
 ## v1.1.0 - 26/01/2023
 

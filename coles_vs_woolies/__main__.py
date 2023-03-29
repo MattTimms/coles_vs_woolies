@@ -1,6 +1,8 @@
 import argparse
+import os
 import textwrap
 from argparse import ArgumentParser
+from typing import List
 
 from coles_vs_woolies.main import display, send
 
@@ -27,12 +29,16 @@ def cli():
     )
 
     subparsers = parser.add_subparsers(dest='action')
-    display_parser = subparsers.add_parser('display', help='Display product price comparisons')
-    send_parser = subparsers.add_parser('send', help='Email product price comparisons')
 
     help_product = 'List of descriptive product search terms. Brand, package weight or size should be included. E.g. ' \
                    '"Cadbury Dairy Milk Chocolate Block 180g" "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"'
+
+    # Display parser
+    display_parser = subparsers.add_parser('display', help='Display product price comparisons')
     display_parser.add_argument('products', nargs='+', help=help_product)
+
+    # Send parser
+    send_parser = subparsers.add_parser('send', help='Email product price comparisons')
     send_parser.add_argument('products', nargs='+', help=help_product)
 
     send_parser.add_argument('-t', '--to_addrs', nargs='+', help="Recipients' email address.", required=True)
@@ -46,13 +52,25 @@ def cli():
                              required=False)
 
     args = vars(parser.parse_args())
-
+    products = _parse_product_inputs(args.pop('products'))
     action = args.pop('action')
-    products = sorted(list(set(args.pop('products'))))
+
     if action == 'send':
         send(products=products, **args)
     else:
         display(products=products)
+
+
+def _parse_product_inputs(args: List[str]) -> List[str]:
+    """ Return product list from input list of products/file-paths """
+    products = []
+    for input_ in args:
+        if os.path.isfile(input_):
+            with open(input_, 'r') as f:
+                products.extend(f.read().splitlines())
+        else:
+            products.append(input_)
+    return sorted(list(set(products)))
 
 
 if __name__ == '__main__':
