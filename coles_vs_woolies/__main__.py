@@ -1,8 +1,11 @@
 import argparse
+import json
 import os
 import textwrap
 from argparse import ArgumentParser
 from typing import List
+
+from pydantic import BaseModel
 
 from coles_vs_woolies.main import display, send
 
@@ -30,8 +33,9 @@ def cli():
 
     subparsers = parser.add_subparsers(dest='action')
 
-    help_product = 'List of descriptive product search terms. Brand, package weight or size should be included. E.g. ' \
-                   '"Cadbury Dairy Milk Chocolate Block 180g" "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"'
+    help_product = 'List of descriptive product search terms. Brand, package weight or size should be included. ' \
+                   'Can be file path. E.g. "Cadbury Dairy Milk Chocolate Block 180g"' \
+                   '"Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"'
 
     # Display parser
     display_parser = subparsers.add_parser('display', help='Display product price comparisons')
@@ -40,23 +44,36 @@ def cli():
     # Send parser
     send_parser = subparsers.add_parser('send', help='Email product price comparisons')
     send_parser.add_argument('products', nargs='+', help=help_product)
-
     send_parser.add_argument('-t', '--to_addrs', nargs='+', help="Recipients' email address.", required=True)
-    send_parser.add_argument('-f', '--from_addr', type=str,
-                             help="Sender's email address. Domain must match that verified with MailerSend.",
-                             required=True)
-    send_parser.add_argument('-m', '--mailersend_api_key', type=str, help='MailerSend API key.', required=False)
     send_parser.add_argument('-o', '--out_dir', type=str, help='Directory for saving copy of the email HTML template.',
                              required=False)
-    send_parser.add_argument('-d', '--dry_run', type=bool, help='Send to disable email delivery', default=False,
+    send_parser.add_argument('-d', '--dry_run', type=bool, help='Disable email delivery', default=False,
                              required=False)
 
-    args = vars(parser.parse_args())
-    products = _parse_product_inputs(args.pop('products'))
-    action = args.pop('action')
+    # Parse inputs
+    kwargs = vars(parser.parse_args())
+    action = kwargs.pop('action')
 
+    _product_inputs = kwargs.pop('products')
+    if os.path.isfile(fp := _product_inputs[0]) and fp.endswith('.json'):
+        with open(fp, 'r') as f:
+            jobs = [_JsonInput.parse_obj(x) for x in json.load(f)]
+        _ = kwargs.pop('to_addrs', None)
+        for job in jobs:
+            _run(action, job.products, to_addrs=job.to_addrs, **kwargs)
+    else:
+        products = _parse_product_inputs(kwargs.pop('products'))
+        _run(action, products, **kwargs)
+
+
+class _JsonInput(BaseModel):
+    to_addrs: List[str]
+    products: List[str]
+
+
+def _run(action: str, products: List[str], **kwargs):
     if action == 'send':
-        send(products=products, **args)
+        send(products=products, **kwargs)
     else:
         display(products=products)
 

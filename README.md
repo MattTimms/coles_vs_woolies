@@ -76,6 +76,10 @@ $ python coles_vs_woolies --help
 #         --from_addr <no-reply@domain.com>
 #         --mailersend_api_key=<MAILERSEND_API_KEY>
 ```
+```shell
+cp .env.example .env
+# populate .env to simplify calls
+```
 
 ## ~~Install w/ GitHub Actions~~
 
