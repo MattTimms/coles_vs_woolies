@@ -1,6 +1,6 @@
 # CHANGELOG.md
 
-## v1.2.0 - pre-release
+## v1.2.0
 
 * Added 'iga' merchant
 * Added CLI import shopping list from txt file

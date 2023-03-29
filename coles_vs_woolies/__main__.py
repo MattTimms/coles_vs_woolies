@@ -20,8 +20,6 @@ def cli():
         "Cadbury Dairy Milk Chocolate Block 180g"
         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
         --to_addrs <me@gmail.com> <you@gmail.com> 
-        --from_addr <no-reply@domain.com>
-        --mailersend_api_key=<MAILERSEND_API_KEY>
     '''
 
     parser = ArgumentParser(
