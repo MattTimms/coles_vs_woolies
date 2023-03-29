@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## v1.2.0
+
+* Added 'iga' merchant
+* Added CLI import shopping list from txt file
+* Added CLI import of multiple shopping lists from json file
+
 ## v1.1.0 - 26/01/2023
 
 * Added `bcc` when sending to multiple recipients

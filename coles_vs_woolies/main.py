@@ -1,4 +1,4 @@
-from typing import List, Any, Dict, Tuple
+from typing import List, Any, Dict
 
 import arrow
 from rich import print
@@ -6,7 +6,7 @@ from rich import print
 from coles_vs_woolies.examples import compare_offers, best_offers_by_merchant, generate_offer_table
 from coles_vs_woolies.emailing.generate import generate_weekly_email
 from coles_vs_woolies.emailing import mailer_send
-from coles_vs_woolies.search import coles, woolies
+from coles_vs_woolies.search import available_merchants
 from coles_vs_woolies.search.types import ProductOffers
 
 
@@ -15,7 +15,7 @@ def get_product_offers(product_names: List[str]) -> ProductOffers:
     product_offers: Dict[str, List[Any]] = {}
     for name in product_names:
         product_offers[name] = []
-        for merchant in [coles, woolies]:
+        for merchant in available_merchants:
             merchant_product_search = merchant.im_feeling_lucky(name)
             if (product := next(merchant_product_search, None)) is not None:
                 product_offers[name].append(product)
@@ -32,6 +32,8 @@ def get_product_offers(product_names: List[str]) -> ProductOffers:
 def display(products: List[str]):
     """ Displays various product comparisons. """
     product_offers = get_product_offers(products)
+
+    # Display options
     compare_offers(product_offers)
     best_offers_by_merchant(product_offers)
     generate_offer_table(product_offers)
@@ -39,9 +41,10 @@ def display(products: List[str]):
 
 def send(*, products: List[str],
          to_addrs: List[str],
-         from_addr: str,
+         from_addr: str = None,
          mailersend_api_key: str = None,
-         out_dir: str = None):
+         out_dir: str = None,
+         dry_run: bool = False):
     """
     Send email of product comparisons for a given list of products.
 
@@ -51,6 +54,7 @@ def send(*, products: List[str],
     :param from_addr: Sender's email address. Domain must match that verified with MailerSend.
     :param mailersend_api_key: MailerSend API key. Must otherwise be accessible from env-vars - see readme.
     :param out_dir: Optional, directory for saving a copy of email HTML template.
+    :param dry_run: set to run without sending emails out.
     :return:
     """
     product_offers = get_product_offers(products)
@@ -63,7 +67,8 @@ def send(*, products: List[str],
 
     # Generate & send email
     email_html = generate_weekly_email(product_offers, out_path=email_out_filepath)
-    mailer_send.send(email_html, to_addrs=to_addrs, from_addr=from_addr, mailersend_api_key=mailersend_api_key)
+    if not dry_run:
+        mailer_send.send(email_html, to_addrs=to_addrs, from_addr=from_addr, mailersend_api_key=mailersend_api_key)
 
     # Display emailed product comparison
     generate_offer_table(product_offers)

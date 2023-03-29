@@ -1,7 +1,6 @@
 import unittest
 
-from coles_vs_woolies.main import get_product_offers
-from coles_vs_woolies.search import coles, woolies
+from coles_vs_woolies.search import available_merchants
 from coles_vs_woolies.search.types import Product
 
 
@@ -12,7 +11,7 @@ class TestSearch(unittest.TestCase):
 
     def test_merchant_search(self):
         product_search_term = self.safe_bet_product
-        for merchant in [coles, woolies]:
+        for merchant in available_merchants:
             product = next(merchant.im_feeling_lucky(product_search_term))
             self.assertIsNotNone(product)
             self.assertIsInstance(product, Product)

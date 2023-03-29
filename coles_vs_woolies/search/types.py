@@ -1,9 +1,11 @@
 import abc
 from typing import Optional, Literal, Dict, List
 
+Merchant = Literal['coles', 'woolies', 'iga']
+
 
 class Product(abc.ABC):
-    merchant: Literal['coles', 'woolies']
+    merchant: Merchant
 
     @property
     @abc.abstractmethod
@@ -31,8 +33,6 @@ class Product(abc.ABC):
 
 
 ProductOffers = Dict[str, List[Product]]  # {'product_name': [Product, ...]}
-Merchant = Literal['coles', 'woolies']
-
 
 # class OfferDict(dict):
 #     @classmethod

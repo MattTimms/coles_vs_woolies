@@ -1,4 +1,5 @@
 import requests
+import requests_cache
 from requests import PreparedRequest, Response
 from requests.adapters import HTTPAdapter, Retry
 
@@ -15,7 +16,7 @@ class DefaultTimeoutAdapter(HTTPAdapter):
 
 def new_session() -> requests.Session:
     """ Return requests.Session with batteries included; i.e. timeout, retries, error-raising. """
-    session = requests.session()
+    session = requests_cache.CachedSession(backend='memory')
     retry_strategy = Retry(
         total=3,
         backoff_factor=1,

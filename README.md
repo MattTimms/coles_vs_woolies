@@ -1,8 +1,10 @@
 # 🍎 coles_vs_woolies 🍏
 
-![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)  
+![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)
 [![pass](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml)
 [![working just fine for me](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml)
+
+🍅 `iga` now supported.
 
 Receive an email every week comparing the price of products you buy often.
 
@@ -73,15 +75,23 @@ $ python coles_vs_woolies --help
 #         "Cadbury Dairy Milk Chocolate Block 180g"
 #         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
 #         --to_addrs <me@gmail.com> <you@gmail.com> 
-#         --from_addr <no-reply@domain.com>
-#         --mailersend_api_key=<MAILERSEND_API_KEY>
+```
+
+```shell
+cp .env.example .env
+# populate .env to simplify calls
 ```
 
 ## Install w/ GitHub Actions
 
+n.b. I found sporadic success with GitHub-hosted runners; I would recommend setting
+up [self-hosted GitHub runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners)
+for consistent success if you wished to continue using GitHub actions rather than running a simple cron job.
+
 1. Fork this repo
 2. Read the GitHub Action workflow [run.yml](.github/workflows/run.yml)
 3. Add GitHub Action Variables & Secrets for those in the [run.yml](.github/workflows/run.yml)
+    - n.b. storing a `shopping-list.json` as a minified json string should do the job
 4. Manually invoke the GitHub Action & confirm an email was received
 
 ## Getting the best results

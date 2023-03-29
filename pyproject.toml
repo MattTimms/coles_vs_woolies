@@ -1,6 +1,6 @@
 [project]
 name = "coles_vs_woolies"
-version = "1.0.0"
+version = "1.2.0"
 description = "Compare & be notified of the best offers of your favourite items from Aussie grocers 🦘🍌"
 readme = "README.md"
 requires-python = ">=3.9"
