@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+## v1.2.0 - pre-release
+
+* Added 'iga' merchant
+
 ## v1.1.0 - 26/01/2023
 
 * Added `bcc` when sending to multiple recipients

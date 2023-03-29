@@ -47,8 +47,8 @@ def best_offers_by_merchant(product_offers: ProductOffers):
 
 def generate_offer_table(product_offers: ProductOffers, verbose: bool = True) -> Table:
     table = Table(show_header=True, header_style="bold yellow", box=box.SIMPLE_HEAD)
-    table.add_column("shopping list", max_width=78)
-    for merchant in ["coles", "woolies"]:
+    table.add_column("shopping list", max_width=128)
+    for merchant in ["coles", "woolies", "iga"]:
         table.add_column(merchant, justify="right", max_width=8)
 
     for product_name, products in product_offers.items():

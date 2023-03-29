@@ -6,7 +6,7 @@ from rich import print
 from coles_vs_woolies.examples import compare_offers, best_offers_by_merchant, generate_offer_table
 from coles_vs_woolies.emailing.generate import generate_weekly_email
 from coles_vs_woolies.emailing import mailer_send
-from coles_vs_woolies.search import coles, woolies
+from coles_vs_woolies.search import available_merchants
 from coles_vs_woolies.search.types import ProductOffers
 
 
@@ -15,7 +15,7 @@ def get_product_offers(product_names: List[str]) -> ProductOffers:
     product_offers: Dict[str, List[Any]] = {}
     for name in product_names:
         product_offers[name] = []
-        for merchant in [coles, woolies]:
+        for merchant in available_merchants:
             merchant_product_search = merchant.im_feeling_lucky(name)
             if (product := next(merchant_product_search, None)) is not None:
                 product_offers[name].append(product)
@@ -32,6 +32,8 @@ def get_product_offers(product_names: List[str]) -> ProductOffers:
 def display(products: List[str]):
     """ Displays various product comparisons. """
     product_offers = get_product_offers(products)
+
+    # Display options
     compare_offers(product_offers)
     best_offers_by_merchant(product_offers)
     generate_offer_table(product_offers)

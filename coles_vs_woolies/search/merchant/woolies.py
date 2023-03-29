@@ -93,7 +93,7 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
         if self.IsAvailable:
             price_str = f'${self.Price}'
             if self.IsOnSpecial:
-                price_str += f' (save ${self.WasPrice - self.Price})'
+                price_str += f' (save ${self.WasPrice - self.Price:.2f})'
         return f"{self.DisplayName} | {price_str}"
 
     @property
@@ -154,7 +154,6 @@ def search(search_term: str, page=1) -> Generator[ProductPageSearchResult, None,
     while True:
         response = _session.post(
             url=url,
-            # cookies={'bm_sz': _session.cookies.get('bm_sz')},
             json=body,
         ).json()
         search_page = ProductPageSearchResult.parse_obj(response)
