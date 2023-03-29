@@ -5,8 +5,15 @@ from typing import List
 from dotenv import load_dotenv, find_dotenv
 from mailersend import emails
 
+load_dotenv(dotenv_path=find_dotenv())
+_MAILERSEND_API_KEY = os.getenv('MAILERSEND_API_KEY')
+_FROM_ADDR = os.getenv('FROM_ADDRESS')
 
-def send(email_html: str, to_addrs: List[str], from_addr: str, mailersend_api_key: str = None):
+
+def send(email_html: str,
+         to_addrs: List[str],
+         from_addr: str = None,
+         mailersend_api_key: str = None):
     """
     Send an email with MailerSend.
     :param email_html: email html template or file path to template.
@@ -15,17 +22,19 @@ def send(email_html: str, to_addrs: List[str], from_addr: str, mailersend_api_ke
     :param mailersend_api_key: API key for MailerSend. If not given, pulled from env-vars.
     :return:
     """
+    # Validate MailerSend requirements
+    from_addr = from_addr or _FROM_ADDR
+    if from_addr is None:
+        raise ValueError("MailerSend `from_addr` not provided")
+    mailersend_api_key = mailersend_api_key or _MAILERSEND_API_KEY
+    if mailersend_api_key is None:
+        raise ValueError("MailerSend API Key not provided")
+
     # If file path, load email html template
     if os.path.isfile(email_html):
         with open(email_html, 'r', encoding='utf-8') as fp:
             email_html = fp.read()
 
-    # Setup MailerSend email
-    if mailersend_api_key is None:
-        load_dotenv(dotenv_path=find_dotenv())
-        mailersend_api_key = os.getenv('MAILERSEND_API_KEY')
-        if mailersend_api_key is None:
-            raise ValueError("MailerSend API Key not provided")
     mailer = emails.NewEmail(mailersend_api_key)
 
     # Define an empty dict to populate with mail values

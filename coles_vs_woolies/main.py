@@ -41,7 +41,7 @@ def display(products: List[str]):
 
 def send(*, products: List[str],
          to_addrs: List[str],
-         from_addr: str,
+         from_addr: str = None,
          mailersend_api_key: str = None,
          out_dir: str = None,
          dry_run: bool = False):

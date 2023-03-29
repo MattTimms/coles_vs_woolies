@@ -30,8 +30,9 @@ def cli():
 
     subparsers = parser.add_subparsers(dest='action')
 
-    help_product = 'List of descriptive product search terms. Brand, package weight or size should be included. E.g. ' \
-                   '"Cadbury Dairy Milk Chocolate Block 180g" "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"'
+    help_product = 'List of descriptive product search terms. Brand, package weight or size should be included. ' \
+                   'Can be file path. E.g. "Cadbury Dairy Milk Chocolate Block 180g"' \
+                   '"Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"'
 
     # Display parser
     display_parser = subparsers.add_parser('display', help='Display product price comparisons')
@@ -40,11 +41,10 @@ def cli():
     # Send parser
     send_parser = subparsers.add_parser('send', help='Email product price comparisons')
     send_parser.add_argument('products', nargs='+', help=help_product)
-
     send_parser.add_argument('-t', '--to_addrs', nargs='+', help="Recipients' email address.", required=True)
     send_parser.add_argument('-f', '--from_addr', type=str,
                              help="Sender's email address. Domain must match that verified with MailerSend.",
-                             required=True)
+                             required=False)
     send_parser.add_argument('-m', '--mailersend_api_key', type=str, help='MailerSend API key.', required=False)
     send_parser.add_argument('-o', '--out_dir', type=str, help='Directory for saving copy of the email HTML template.',
                              required=False)
