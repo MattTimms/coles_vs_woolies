@@ -4,6 +4,7 @@ from pydantic import BaseModel, Extra
 
 from coles_vs_woolies.search import types
 from coles_vs_woolies.search.session import new_session
+from coles_vs_woolies.search.similarity import jaccard_similarity
 
 _session = new_session()
 _DEFAULT_STORE = 52511  # SUPA IGA Georges Hall
@@ -89,6 +90,7 @@ class ProductPageSearchResult(BaseModel, extra=Extra.allow):
 def im_feeling_lucky(search_term: str) -> Generator[Product, None, None]:
     paginated_search = search(search_term)
     for page in paginated_search:
+        page.items.sort(key=lambda x: jaccard_similarity(search_term, x.display_name), reverse=True)
         for product in page.items:
             yield product
 
@@ -98,7 +100,7 @@ def search(search_term: str) -> Generator[ProductPageSearchResult, None, None]:
     params = {
         'q': search_term,
         'skip': 0,
-        'take': 20
+        'take': 40
     }
     while True:
         response = _session.get(url=url, params=params).json()
