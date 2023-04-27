@@ -10,6 +10,9 @@ on:
         default: true
         type: boolean
 
+env:
+  timezone: 'Australia/Melbourne'
+  TZ: 'Australia/Melbourne'
 
 # n.b shocked to learn GH actions don't support yaml anchors (https://github.com/actions/runner/issues/1182)
 jobs:
@@ -24,8 +27,6 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
       - name: Install dependencies
-        env:
-          timezone: 'Australia/Melbourne'
         run: |
           pip install -r requirements.txt
       - name: Place shopping list
@@ -51,8 +52,6 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
       - name: Install dependencies
-        env:
-          timezone: 'Australia/Melbourne'
         run: |
           pip install -r requirements.txt
       - name: Place shopping list
