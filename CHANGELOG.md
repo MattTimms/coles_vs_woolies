@@ -1,5 +1,10 @@
 # CHANGELOG.md
 
+## v1.2.1
+* Dropped Python3.9 support
+* Refactored CLI entry
+* Fixed to missing merchant in email 
+
 ## v1.2.0
 
 * Added 'iga' merchant

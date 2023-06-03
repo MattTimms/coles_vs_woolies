@@ -120,13 +120,13 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
 
 
 class ProductSearchResult(BaseModel, extra=Extra.allow):
-    Products: Optional[List[Product]]
+    Products: Optional[list[Product]]
     Name: str
     DisplayName: str
 
 
 class ProductPageSearchResult(BaseModel, extra=Extra.allow):
-    Products: Optional[List[ProductSearchResult]]
+    Products: Optional[list[ProductSearchResult]]
     SearchResultsCount: int
     Corrections: Optional[Any]
     SuggestedTerm: Optional[Any]

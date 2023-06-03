@@ -1,6 +1,6 @@
 # 🍎 coles_vs_woolies 🍏
 
-![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-blue)
+![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)
 [![pass](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml)
 [![working just fine for me](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml)
 

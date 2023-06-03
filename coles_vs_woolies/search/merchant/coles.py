@@ -90,7 +90,7 @@ class ProductPageSearchResult(BaseModel, extra=Extra.allow):
     pageSize: int  # 48
     keyword: str  # "cadbury chocolate"
     resultType: int  # 1
-    results: List[Product]
+    results: list[Product]
 
     def search_exact(self, product_name: str) -> Optional[Product]:
         """ Return product that matches product_name within list of paged results """

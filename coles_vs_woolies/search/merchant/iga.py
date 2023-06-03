@@ -29,7 +29,7 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
     # categories: ...
     # defaultCategory: ...
     description: str
-    image: Dict[str, str]
+    image: dict[str, str]
     isFavorite: bool
     isPastPurchased: bool
     name: str
@@ -83,7 +83,7 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
 
 class ProductPageSearchResult(BaseModel, extra=Extra.allow):
     count: int  # page count
-    items: List[Product]
+    items: list[Product]
     total: int  # total results
 
 
@@ -114,4 +114,3 @@ def search(search_term: str) -> Generator[ProductPageSearchResult, None, None]:
 if __name__ == '__main__':
     gen = search('Cadbury Dairy Milk Chocolate Block 180g')
     print(next(gen))
-    print(1)

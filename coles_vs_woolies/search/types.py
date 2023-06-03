@@ -1,5 +1,5 @@
 import abc
-from typing import Optional, Literal, Dict, List
+from typing import Literal, Optional
 
 Merchant = Literal['coles', 'woolies', 'iga']
 
@@ -32,7 +32,7 @@ class Product(abc.ABC):
         return (self.price or 1e6) < (other.price or 1e6)  # default to big number when no price available
 
 
-ProductOffers = Dict[str, List[Product]]  # {'product_name': [Product, ...]}
+ProductOffers = dict[str, list[Product]]  # {'product_name': [Product, ...]}
 
 # class OfferDict(dict):
 #     @classmethod
@@ -41,7 +41,7 @@ ProductOffers = Dict[str, List[Product]]  # {'product_name': [Product, ...]}
 #     def price_by_merchant(self, merchant: Merchant) -> Optional[float]:
 #         return self[merchant].price
 #
-#     def to_list(self, sort: bool = False) -> List[_Product]:
+#     def to_list(self, sort: bool = False) -> list[_Product]:
 #         if sort:
 #             return sorted(self.items(), key=_sort_by_price_key)
 #         else:
