@@ -98,7 +98,7 @@ def im_feeling_lucky(search_term: str) -> Generator[Product, None, None]:
 def search(search_term: str) -> Generator[ProductPageSearchResult, None, None]:
     url = f'https://www.igashop.com.au/api/storefront/stores/{_DEFAULT_STORE}/search'
     params = {
-        'q': search_term,
+        'q': search_term[:50],  # n.b. no results if query > 50
         'skip': 0,
         'take': 40
     }

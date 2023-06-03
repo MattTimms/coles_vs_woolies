@@ -1,9 +1,11 @@
 # CHANGELOG.md
 
 ## v1.2.1
+
 * Dropped Python3.9 support
 * Refactored CLI entry
-* Fixed to missing merchant in email 
+* Fixed to missing merchant in email
+* Fixed IGA no-results if query >50 chars
 
 ## v1.2.0
 
