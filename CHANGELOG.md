@@ -1,8 +1,18 @@
 # CHANGELOG.md
 
+## v1.3.0
+
+* Added support for merchant-exclusive products
+* Added Jaccard similarity sorting for better accuracy results
+* Dropped Python3.9 support
+* Refactored CLI entry
+* Fixed missing merchant in email
+* Fixed IGA no-results if query >50 chars
+* Fixed email formatting for no-offer-merchants
+
 ## v1.2.0
 
-* Added 'iga' merchant
+* Added 'iga' merchant 
 * Added CLI import shopping list from txt file
 * Added CLI import of multiple shopping lists from json file
 

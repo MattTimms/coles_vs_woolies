@@ -1,8 +1,7 @@
 import datetime
 import os
-from typing import List
 
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv
 from mailersend import emails
 
 load_dotenv(dotenv_path=find_dotenv())
@@ -11,7 +10,7 @@ _FROM_ADDR = os.getenv('FROM_ADDRESS')
 
 
 def send(email_html: str,
-         to_addrs: List[str],
+         to_addrs: list[str],
          from_addr: str = None,
          mailersend_api_key: str = None):
     """

@@ -37,7 +37,7 @@ jobs:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
           FROM_ADDRESS: no-reply@${{ secrets.DOMAIN }}
         run: |
-          python coles_vs_woolies send shopping-list.json \
+          python coles_vs_woolies shopping-list.json \
             ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry_run' || '' }}
   local:
     needs: github
@@ -62,5 +62,5 @@ jobs:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
           FROM_ADDRESS: no-reply@${{ secrets.DOMAIN }}
         run: |
-          python coles_vs_woolies send shopping-list.json \
+          python coles_vs_woolies shopping-list.json \
             ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry_run' || '' }}

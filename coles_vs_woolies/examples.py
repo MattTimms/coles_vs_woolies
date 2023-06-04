@@ -1,13 +1,14 @@
 """ A collection of display examples for product comparisons """
 
 from collections import defaultdict
-from typing import Dict, List, Literal
+from typing import Literal
 
 from rich import box
 from rich.console import Console
 from rich.table import Table
 
-from coles_vs_woolies.search.types import ProductOffers, Merchant, Product
+from coles_vs_woolies.search.similarity import jaccard_similarity
+from coles_vs_woolies.search.types import Merchant, Product, ProductOffers
 
 _console = Console()
 
@@ -23,13 +24,14 @@ def compare_offers(product_offers: ProductOffers):
         for i, _product in enumerate(products):
             txt_colour = 'green' if is_sales and i in cheapest_product_idx else 'grey50'
             # txt_colour = None if not i else 'grey50'
-            _console.print(f'  {_product.merchant.upper()}: {_product}', style=txt_colour)
+            similarity = jaccard_similarity(name, _product.display_name)
+            _console.print(f'  {_product.merchant.upper()}: {_product} | {similarity=:.2f}', style=txt_colour)
     _console.print('\n')
 
 
 def best_offers_by_merchant(product_offers: ProductOffers):
     # Collect the cheapest offer
-    cheapest_products_by_merchant: Dict[Merchant | Literal['either'], List[Product]] = defaultdict(list)
+    cheapest_products_by_merchant: dict[Merchant | Literal['either'], list[Product]] = defaultdict(list)
     for products in product_offers.values():
         is_all_same_price = len(set(p.price for p in products)) == 1
         if is_all_same_price:

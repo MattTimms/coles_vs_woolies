@@ -1,4 +1,4 @@
-from typing import Any, Optional, List, Generator, Dict
+from typing import Any, Generator, Optional
 
 from pydantic import BaseModel, Extra
 
@@ -29,14 +29,14 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
     # categories: ...
     # defaultCategory: ...
     description: str
-    image: Dict[str, str]
+    image: dict[str, Optional[str]]
     isFavorite: bool
     isPastPurchased: bool
     name: str
     # price: str  # "$3.20" n.b. omitted due to clash with class-property
     priceLabel: str
     priceNumeric: float  # 3.2
-    pricePerUnit: str  # "$0.64/100ml"
+    pricePerUnit: Optional[str]  # "$0.64/100ml"
     priceSource: str
     productId: str
     sellBy: str
@@ -83,7 +83,7 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
 
 class ProductPageSearchResult(BaseModel, extra=Extra.allow):
     count: int  # page count
-    items: List[Product]
+    items: list[Product]
     total: int  # total results
 
 
@@ -98,7 +98,7 @@ def im_feeling_lucky(search_term: str) -> Generator[Product, None, None]:
 def search(search_term: str) -> Generator[ProductPageSearchResult, None, None]:
     url = f'https://www.igashop.com.au/api/storefront/stores/{_DEFAULT_STORE}/search'
     params = {
-        'q': search_term,
+        'q': search_term[:50],  # n.b. no results if query > 50
         'skip': 0,
         'take': 40
     }
@@ -114,4 +114,3 @@ def search(search_term: str) -> Generator[ProductPageSearchResult, None, None]:
 if __name__ == '__main__':
     gen = search('Cadbury Dairy Milk Chocolate Block 180g')
     print(next(gen))
-    print(1)

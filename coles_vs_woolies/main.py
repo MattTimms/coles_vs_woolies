@@ -1,23 +1,25 @@
-from typing import List, Any, Dict
-
 import arrow
 from rich import print
 
-from coles_vs_woolies.examples import compare_offers, best_offers_by_merchant, generate_offer_table
-from coles_vs_woolies.emailing.generate import generate_weekly_email
 from coles_vs_woolies.emailing import mailer_send
+from coles_vs_woolies.emailing.generate import generate_weekly_email
+from coles_vs_woolies.examples import best_offers_by_merchant, compare_offers, generate_offer_table
 from coles_vs_woolies.search import available_merchants
+from coles_vs_woolies.search.similarity import jaccard_similarity
 from coles_vs_woolies.search.types import ProductOffers
 
+MAGIC_SIMILARITY_MIN = 0.3
 
-def get_product_offers(product_names: List[str]) -> ProductOffers:
+
+def get_product_offers(product_names: list[str]) -> ProductOffers:
     """ Returns ProductOffers object with optimistic search results for product_names. """
-    product_offers: Dict[str, List[Any]] = {}
+    product_offers: ProductOffers = {}
     for name in product_names:
         product_offers[name] = []
         for merchant in available_merchants:
             merchant_product_search = merchant.im_feeling_lucky(name)
-            if (product := next(merchant_product_search, None)) is not None:
+            if (product := next(merchant_product_search, None)) is not None and \
+                    jaccard_similarity(name, product.display_name) > MAGIC_SIMILARITY_MIN:
                 product_offers[name].append(product)
 
         if not product_offers[name]:
@@ -29,7 +31,7 @@ def get_product_offers(product_names: List[str]) -> ProductOffers:
     return product_offers
 
 
-def display(products: List[str]):
+def display(products: list[str]):
     """ Displays various product comparisons. """
     product_offers = get_product_offers(products)
 
@@ -39,8 +41,8 @@ def display(products: List[str]):
     generate_offer_table(product_offers)
 
 
-def send(*, products: List[str],
-         to_addrs: List[str],
+def send(*, products: list[str],
+         to_addrs: list[str],
          from_addr: str = None,
          mailersend_api_key: str = None,
          out_dir: str = None,
@@ -57,6 +59,13 @@ def send(*, products: List[str],
     :param dry_run: set to run without sending emails out.
     :return:
     """
+    # Censor email addresses for logging
+    censored_emails = []
+    for addr in to_addrs:
+        prefix, domain = addr.split('@')
+        censored_emails.append(f'{prefix[:5].ljust(10, "*")}@{domain}')
+    print(f'Haggling for: {censored_emails}')
+
     product_offers = get_product_offers(products)
 
     # Prepare file path for saving generated email template
@@ -72,6 +81,7 @@ def send(*, products: List[str],
 
     # Display emailed product comparison
     generate_offer_table(product_offers)
+    compare_offers(product_offers)
 
 
 if __name__ == '__main__':
