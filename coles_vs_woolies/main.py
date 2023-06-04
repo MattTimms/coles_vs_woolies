@@ -1,5 +1,3 @@
-from typing import Any
-
 import arrow
 from rich import print
 
@@ -7,17 +5,21 @@ from coles_vs_woolies.emailing import mailer_send
 from coles_vs_woolies.emailing.generate import generate_weekly_email
 from coles_vs_woolies.examples import best_offers_by_merchant, compare_offers, generate_offer_table
 from coles_vs_woolies.search import available_merchants
+from coles_vs_woolies.search.similarity import jaccard_similarity
 from coles_vs_woolies.search.types import ProductOffers
+
+MAGIC_SIMILARITY_MIN = 0.3
 
 
 def get_product_offers(product_names: list[str]) -> ProductOffers:
     """ Returns ProductOffers object with optimistic search results for product_names. """
-    product_offers: dict[str, list[Any]] = {}
+    product_offers: ProductOffers = {}
     for name in product_names:
         product_offers[name] = []
         for merchant in available_merchants:
             merchant_product_search = merchant.im_feeling_lucky(name)
-            if (product := next(merchant_product_search, None)) is not None:
+            if (product := next(merchant_product_search, None)) is not None and \
+                    jaccard_similarity(name, product.display_name) > MAGIC_SIMILARITY_MIN:
                 product_offers[name].append(product)
 
         if not product_offers[name]:

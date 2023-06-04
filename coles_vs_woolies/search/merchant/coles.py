@@ -1,11 +1,12 @@
 import json
-from typing import List, Literal, Optional, Generator
+from typing import Generator, Literal, Optional
 
 from bs4 import BeautifulSoup
 from pydantic import BaseModel, Extra
 
 from coles_vs_woolies.search import types
 from coles_vs_woolies.search.session import new_session
+from coles_vs_woolies.search.similarity import jaccard_similarity
 
 _session = new_session()
 
@@ -104,6 +105,7 @@ class ProductPageSearchResult(BaseModel, extra=Extra.allow):
 def im_feeling_lucky(search_term: str) -> Generator[Product, None, None]:
     paginated_search = search(search_term)
     for page in paginated_search:
+        page.results.sort(key=lambda x: jaccard_similarity(search_term, x.display_name), reverse=True)
         for product in page.results:
             yield product
 

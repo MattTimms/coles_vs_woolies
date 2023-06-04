@@ -26,7 +26,7 @@ def generate_weekly_email(product_offers: ProductOffers, out_path: str = None) -
     with open(_TEMPLATE_DIR / 'snippets/table_row.html', 'r', encoding="utf-8") as f:
         html_template_table_row: str = f.read()
 
-    # Replace template variables
+    # Build merchant offer HTML rows from template
     rows = []
     green, light_grey = '#008000', '#afafaf'
     html_padding = '<span style="opacity:0;">0</span>'
@@ -41,30 +41,34 @@ def generate_weekly_email(product_offers: ProductOffers, out_path: str = None) -
         for offer in offers:
             merchant = offer.merchant
             merchants_with_offers.add(merchant)
-            price = offer.price if offer.price is not None else 'n/a'
-            colour = green if is_sales and price == lowest_price else light_grey
-            zero_padding = html_padding if len(str(price).split('.')[-1]) == 1 else ''
 
-            html_replacement = f'<a href="{offer.link}" style="color:{colour};text-decoration:inherit;">${price}{zero_padding}</a>'
+            # Determine text replacement details
+            price = f'${offer.price}' if offer.price is not None else '-'
+            colour = green if is_sales and offer.price == lowest_price else light_grey
+            zero_padding = html_padding if len(price.split('.')[-1]) == 1 else ''
+
+            # Insert merchant offer into HTML template
+            html_replacement = f'<a href="{offer.link}" style="color:{colour};text-decoration:inherit;">{price}{zero_padding}</a>'
             row_template = row_template.replace('{{ %(merchant)s_price }}' % {"merchant": merchant}, html_replacement)
 
         # Format email for merchants without offers
         for missing_merchant in available_merchants_names.difference(merchants_with_offers):
-            html_replacement = f'<a href="#" style="color:{light_grey};text-decoration:inherit;">n/a{html_padding}</a>'
+            html_replacement = f'<span style="color:{light_grey};">-<span style="opacity:0;">00</span></span>'
             row_template = row_template.replace('{{ %(merchant)s_price }}' % {"merchant": missing_merchant},
                                                 html_replacement)
 
         rows.append(row_template)
 
+    # Build HTML table of merchant offers
     html_template_table = html_template_table.replace('{{ rows }}', ''.join(rows))
     html_template = html_template.replace('{{ table }}', html_template_table)
 
-    # Add time
+    # Add timespan to template
     year, week, weekday = datetime.datetime.now().isocalendar()
     week_start, week_fin = (week - 1, week) if weekday < 3 else (week, week + 1)
     start = datetime.datetime.fromisocalendar(year, week_start, 3)
     fin = datetime.datetime.fromisocalendar(year, week_fin, 2)
-    html_template = html_template.replace('{{ intro }}',
+    html_template = html_template.replace('{{ timespan }}',
                                           f"Deals from {start.strftime('%a %d/%m')} till {fin.strftime('%a %d/%m')}")
 
     # Output formatted template

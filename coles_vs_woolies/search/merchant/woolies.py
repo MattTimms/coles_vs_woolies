@@ -1,10 +1,11 @@
 import urllib.parse
-from typing import Any, Optional, List, Generator
+from typing import Any, Generator, Optional
 
 from pydantic import BaseModel, Extra
 
 from coles_vs_woolies.search import types
 from coles_vs_woolies.search.session import new_session
+from coles_vs_woolies.search.similarity import jaccard_similarity
 
 
 def _woolies_session():
@@ -135,6 +136,7 @@ class ProductPageSearchResult(BaseModel, extra=Extra.allow):
 def im_feeling_lucky(search_term: str) -> Generator[Product, None, None]:
     paginated_search = search(search_term)
     for page in paginated_search:
+        page.Products.sort(key=lambda x: jaccard_similarity(search_term, x.Products[0].display_name), reverse=True)
         for product in page.Products:
             for _product in product.Products:
                 yield _product

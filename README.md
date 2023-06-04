@@ -54,32 +54,25 @@ pip install -r requirements.txt
 
 ```shell
 $ python coles_vs_woolies --help
-# usage: coles_vs_woolies [-h] {display,send} ...
+# usage: coles_vs_woolies [-h] [-o OUT_DIR] [-d] file_path
 # 
 # Compare prices between Aussie grocers
 # 
 # positional arguments:
-#   {display,send}
-#     display       Display product price comparisons
-#     send          Email product price comparisons
+#   file_path             File path to a JSON config shopping list; see `shopping-list.example.json`
 # 
 # options:
-#   -h, --help      show this help message and exit
-# 
-# example:
-#     python coles_vs_woolies display
-#         "Cadbury Dairy Milk Chocolate Block 180g"
-#         "Connoisseur Ice Cream Vanilla Caramel Brownie 1L"
-#        
-#     python coles_vs_woolies send
-#         "Cadbury Dairy Milk Chocolate Block 180g"
-#         "Connoisseur Ice Cream Vanilla Caramel Brownie 4 Pack"
-#         --to_addrs <me@gmail.com> <you@gmail.com> 
+#   -h, --help            show this help message and exit
+#   -o OUT_DIR, --out_dir OUT_DIR
+#                         Directory for saving copy of the email HTML template.
+#   -d, --dry_run         Disable email delivery
 ```
 
 ```shell
 cp .env.example .env
 # populate .env to simplify calls
+cp shopping-list.example.json shopping-list.json
+# populate the shopping list with your email & desired items
 ```
 
 ## Install w/ GitHub Actions

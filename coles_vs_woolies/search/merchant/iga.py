@@ -1,4 +1,4 @@
-from typing import Any, Optional, List, Generator, Dict
+from typing import Any, Generator, Optional
 
 from pydantic import BaseModel, Extra
 
@@ -29,14 +29,14 @@ class Product(types.Product, BaseModel, extra=Extra.allow):
     # categories: ...
     # defaultCategory: ...
     description: str
-    image: dict[str, str]
+    image: dict[str, Optional[str]]
     isFavorite: bool
     isPastPurchased: bool
     name: str
     # price: str  # "$3.20" n.b. omitted due to clash with class-property
     priceLabel: str
     priceNumeric: float  # 3.2
-    pricePerUnit: str  # "$0.64/100ml"
+    pricePerUnit: Optional[str]  # "$0.64/100ml"
     priceSource: str
     productId: str
     sellBy: str
