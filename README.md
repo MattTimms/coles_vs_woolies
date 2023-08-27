@@ -1,5 +1,19 @@
 # 🍎 coles_vs_woolies 🍏
 
+---
+
+### Archiving 27/08/2023
+
+I'm archiving this repo. I've got something better somewhere else.  
+
+* I've started a related project that takes the core functionality sketched within this repo & presents it in a site
+  format for individuals to compare deals & configure email newsletters for their own shopping needs.
+* It's clear to those whom have tip-toed through this repo that its design is needlessly rigid & prone to failure once
+  merchants update their APIs, which has already been the case. I do not wish to continue supporting this repo as I have
+  already made good progress refactoring a more robust version for my other project.
+
+---
+
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)
 [![pass](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml)
 [![working just fine for me](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml)
