@@ -1,42 +1,50 @@
-import argparse
-import json
-from argparse import ArgumentParser
+import logging
+import pathlib
 
-from pydantic import BaseModel, Extra
-
-from coles_vs_woolies.main import send
+from coles_vs_woolies import search, send_weekly_email
+from coles_vs_woolies.utils import session
 
 
-class ShoppingList(BaseModel, extra=Extra.allow):
-    """ Model for the `shopping-list` json config file. """
-    to_addrs: list[str]
-    products: list[str]
+def _search(keyword: str, **kwargs):
+    search_result = search.Search(keyword=keyword)
+    search_result.display()
 
 
 def cli():
-    parser = ArgumentParser(
-        prog='coles_vs_woolies',
-        description='Compare prices between Aussie grocers',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+    import argparse
+
+    parser = argparse.ArgumentParser(prog=__package__, description="Compare prices between Aussie grocers")
+    subparsers = parser.add_subparsers(title="actions")
+    parent_parser = argparse.ArgumentParser(add_help=False)
+    parent_parser.add_argument("-v", "--verbose", action="store_true")
+
+    search_parser = subparsers.add_parser("search", parents=[parent_parser], help="Search products")
+    search_parser.add_argument("keyword", nargs="+", type=str, help="Product name to search")
+    search_parser.set_defaults(func=_search)
+
+    email_parser = subparsers.add_parser("email", parents=[parent_parser], help="Emails search results")
+    email_parser.add_argument(
+        "filepath", type=pathlib.Path, help="Path to a JSON config shopping list; see `shopping-list.example.json`"
     )
-    parser.add_argument('file_path', type=str,
-                        help='File path to a JSON config shopping list; see `shopping-list.example.json`')
-    parser.add_argument('-o', '--out_dir', type=str, required=False,
-                        help='Directory for saving copy of the email HTML template.')
-    parser.add_argument('-d', '--dry_run', action='store_true', default=False, required=False,
-                        help='Disable email delivery')
+    email_parser.add_argument("-o", "--out_dir", type=pathlib.Path, help="Directory to save copy of email HTML")
+    email_parser.add_argument("-d", "--dry_run", action="store_true", help="Disable email delivery")
+    email_parser.set_defaults(func=send_weekly_email)
 
-    # Parse inputs
-    kwargs = vars(parser.parse_args())
-    with open(kwargs.pop('file_path'), 'r') as fp:
-        shopping_lists: list[ShoppingList] = [ShoppingList.parse_obj(list_) for list_ in json.load(fp)]
+    cache_parser = subparsers.add_parser("cache", help="Clears requests' cache")
+    cache_parser.set_defaults(func=session.clear_cache)
 
-    # Run for each shopping list
-    for shopping_list in shopping_lists:
-        send(products=shopping_list.products,
-             to_addrs=shopping_list.to_addrs,
-             **kwargs)
+    args = parser.parse_args()
+    if args.verbose:
+        logger = logging.getLogger(__package__)
+        logger.addHandler(logging.StreamHandler())
+        logger.setLevel(logging.DEBUG)
+    if args.func == _search and isinstance(args.keyword, list):
+        args.keyword = " ".join(args.keyword)
+
+    args = vars(args)
+    func = args.pop("func")
+    func(**args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

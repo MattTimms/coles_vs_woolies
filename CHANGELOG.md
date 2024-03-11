@@ -1,5 +1,13 @@
 # CHANGELOG.md
 
+## v2.0.0
+* We're so back / core redesign
+* Supporting Python>=3.11
+* Added product size, price per unit, discount labelling
+* Added concurrent search, bulk search
+* Updated most dependencies
+* Fixed rigid product models; less prone to fail from future changes to merchant API responses
+
 ## v1.3.0
 
 * Added support for merchant-exclusive products
@@ -12,7 +20,7 @@
 
 ## v1.2.0
 
-* Added `iga` merchant 
+* Added `iga` merchant
 * Added CLI import shopping list from txt file
 * Added CLI import of multiple shopping lists from json file
 
