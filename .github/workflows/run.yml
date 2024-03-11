@@ -2,33 +2,30 @@ name: Weekly email service
 
 on:
   schedule:
-    # Runs “At 07:30 on Wednesday.” UTC+11 (see https://crontab.guru) & remember that the below is in UTC!
-    - cron: '30 20 * * 2'
+    - cron: '0 20 * * 2'  # UTC | Runs “At 7am on Wednesday.” UTC+11 | https://crontab.guru
   workflow_dispatch:
     inputs:
       dry_run:
         default: true
+        description: "Do not send emails"
         type: boolean
 
 env:
   timezone: 'Australia/Melbourne'
   TZ: 'Australia/Melbourne'
 
-# n.b shocked to learn GH actions don't support yaml anchors (https://github.com/actions/runner/issues/1182)
 jobs:
   github:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
           cache: 'pip'
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install .
       - name: Place shopping list
         run: |
           echo '${{ secrets.SHOPPING_LIST }}' >> shopping-list.json
@@ -37,30 +34,5 @@ jobs:
           MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
           FROM_ADDRESS: no-reply@${{ secrets.DOMAIN }}
         run: |
-          python coles_vs_woolies shopping-list.json \
-            ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry_run' || '' }}
-  local:
-    needs: github
-    if: always() && contains(needs.*.result, 'failure')
-    runs-on: self-hosted
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-          cache: 'pip'
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-      - name: Place shopping list
-        run: |
-          echo '${{ secrets.SHOPPING_LIST }}' >> shopping-list.json
-      - name: Email comparisons
-        env:
-          MAILERSEND_API_KEY: ${{ secrets.MAILERSEND_API_KEY }}
-          FROM_ADDRESS: no-reply@${{ secrets.DOMAIN }}
-        run: |
-          python coles_vs_woolies shopping-list.json \
+          python coles_vs_woolies email shopping-list.json --verbose \
             ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry_run' || '' }}

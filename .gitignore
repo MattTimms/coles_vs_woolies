@@ -1,6 +1,6 @@
 .idea
-shopping-list.json
-shopping-list.bkup.json
+shopping-list*.json
+!shopping-list.example.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

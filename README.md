@@ -1,24 +1,10 @@
 # 🍎 coles_vs_woolies 🍏
 
----
-
-### Archiving 27/08/2023
-
-I'm archiving this repo. I've got something better somewhere else.  
-
-* I've started a related project that takes the core functionality sketched within this repo & presents it in a site
-  format for individuals to compare deals & configure email newsletters for their own shopping needs.
-* It's clear to those whom have tip-toed through this repo that its design is needlessly rigid & prone to failure once
-  merchants update their APIs, which has already been the case. I do not wish to continue supporting this repo as I have
-  already made good progress refactoring a more robust version for my other project.
-
----
-
-![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11-blue)
+![Python](https://img.shields.io/badge/python-3.11-blue)
 [![pass](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/test.yml)
 [![working just fine for me](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml/badge.svg)](https://github.com/MattTimms/coles_vs_woolies/actions/workflows/run.yml)
 
-🍅 `iga` now supported.
+🍅 `iga` now supported. (not that their online store is any good)
 
 Receive an email every week comparing the price of products you buy often.
 
@@ -56,30 +42,30 @@ developer community is a good thing & if your website is public then it can/will
 
 [MailerSend](https://www.mailersend.com/) is an email & notifications SaaS with a free-tier that suits personal use.
 You'll need to own a domain & verify it with the platform, such that emails can be sent from
-that domain i.e `from: no-reply@mydomain.com`.  
+that domain i.e `from: no-reply@mydomain.com`.
 This project also leverages MailSenders' email template features so consider that if you wish to incorporate your own
 email provider.
 
 ## Usage
 
 ```shell
-pip install -r requirements.txt
+pip install .
 ```
 
 ```shell
 $ python coles_vs_woolies --help
-# usage: coles_vs_woolies [-h] [-o OUT_DIR] [-d] file_path
-# 
-# Compare prices between Aussie grocers
-# 
-# positional arguments:
-#   file_path             File path to a JSON config shopping list; see `shopping-list.example.json`
-# 
-# options:
-#   -h, --help            show this help message and exit
-#   -o OUT_DIR, --out_dir OUT_DIR
-#                         Directory for saving copy of the email HTML template.
-#   -d, --dry_run         Disable email delivery
+usage: coles_vs_woolies [-h] {search,email,cache} ...
+
+Compare prices between Aussie grocers
+
+options:
+  -h, --help            show this help message and exit
+
+actions:
+  {search,email,cache}
+    search              Search products
+    email               Emails search results
+    cache               Clears requests' cache
 ```
 
 ```shell
